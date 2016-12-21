@@ -23,5 +23,14 @@ namespace Intent.AnalisisDocumentos
         {
             InitializeComponent();
         }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            bool? result = dialog.ShowDialog();
+            if (result.Value)
+            {
+            }
+        }
     }
 }

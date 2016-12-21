@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Intent.AnalisisDocumentos"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" >
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="50*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Analisis de carpetas" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+        <Button x:Name="button" Content="Cargar documento .csv" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="Auto" Grid.Row="1" Click="button_Click"/>
+
     </Grid>
 </Window>
