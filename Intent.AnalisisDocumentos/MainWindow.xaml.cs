@@ -1,18 +1,6 @@
 ﻿using Intent.AnalisisDocumentos.BL;
 using Intent.AnalisisDocumentos.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Intent.AnalisisDocumentos
 {
@@ -26,7 +14,7 @@ namespace Intent.AnalisisDocumentos
         {
             InitializeComponent();
             configFile = new ConfigFile(Prefijo.Text, Codigo.Text, Numero.Text, RutaBusqueda.Text);
-            
+
             Config config = configFile.CovertToObject();
             if (config != null)
             {
@@ -38,7 +26,7 @@ namespace Intent.AnalisisDocumentos
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
-        {            
+        {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
             bool? result = dialog.ShowDialog();
             if (result.Value)
@@ -46,9 +34,20 @@ namespace Intent.AnalisisDocumentos
                 ConfigFile configFile = new ConfigFile(Prefijo.Text, Codigo.Text, Numero.Text, RutaBusqueda.Text);
                 configFile.CheckConfig();
 
-                ProcessCSV.SplitCSV(dialog.FileName, RutaBusqueda.Text);                
+                ProcessCSV.SplitCSV(dialog.FileName, RutaBusqueda.Text);
 
             }
-}
+        }
+
+        //private void Button_Click_1(object sender, RoutedEventArgs e)
+        //{
+        //    FolderBrowserDialog
+        //    Microsoft.Win32.CommonDialog dialog = new Microsoft.Win32.CommonDialog();
+        //    bool? result = dialog.ShowDialog();
+        //    if (result.Value)
+        //    {
+        //        RutaBusqueda.Text = dialog.InitialDirectory;
+        //    }
+        //}
     }
 }

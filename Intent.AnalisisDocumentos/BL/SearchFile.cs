@@ -8,9 +8,17 @@ namespace Intent.AnalisisDocumentos.BL
 {
     public class SearchFile
     {
-        public static void SearchAccessibleFiles(string fileName, string extension, string searchPath)
+        private String[] files;
+        private string extension;
+
+        public SearchFile(string extension, string searchPath)
+        {            
+            this.extension = extension;
+            files = Directory.GetFiles(searchPath, string.Format("{0}{1}", "*", extension), SearchOption.AllDirectories);
+        }
+
+        public void SearchAccessibleFiles(string fileName)
         {
-            String[] files = Directory.GetFiles(searchPath, string.Format("{0}{1}", "*", extension), SearchOption.AllDirectories);
             string file = files.FirstOrDefault(item => item.Contains(string.Format("{0}{1}", fileName, extension)));
             if (!string.IsNullOrEmpty(file))
             {

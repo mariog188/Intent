@@ -37,7 +37,12 @@
             <TextBox Name="Numero"
                      Margin="5"
                      Text="" />
-            <TextBox Margin="5" Name="RutaBusqueda" Text="" />
+            <!--<StackPanel Orientation="Horizontal">-->
+            <TextBox Name="RutaBusqueda"
+                     Margin="5"
+                     Text="" />
+            <!--<Button Content="Seleccionar Ruta"  Click="Button_Click_1" />-->
+            <!--</StackPanel>-->
         </StackPanel>
         <TextBlock Grid.Column="2"
                    HorizontalAlignment="Center"
