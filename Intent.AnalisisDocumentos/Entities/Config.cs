@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Intent.AnalisisDocumentos.Entities
+﻿namespace Intent.AnalisisDocumentos.Entities
 {
     public class Config
     {

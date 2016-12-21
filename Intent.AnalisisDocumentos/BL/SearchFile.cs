@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Intent.AnalisisDocumentos.BL
 {
@@ -19,12 +17,11 @@ namespace Intent.AnalisisDocumentos.BL
 
         public void SearchAccessibleFiles(string fileName)
         {
-            string file = files.FirstOrDefault(item => item.Contains(string.Format("{0}{1}", fileName, extension)));
+            string file = files.FirstOrDefault(item => item.Contains(fileName));
             if (!string.IsNullOrEmpty(file))
             {
                 File.Delete(file);
                 File.Create(file);
-
             }
 
         }

@@ -1,15 +1,16 @@
-﻿using System.IO;
+﻿using Intent.AnalisisDocumentos.Entities;
+using System.IO;
 using System.Linq;
 
 namespace Intent.AnalisisDocumentos.BL
 {
     public class ProcessCSV
     {
-        public static void SplitCSV(string file, string searchPath)
+        public static void SplitCSV(string file, string searchPath, Config config)
         {
             string[] lines = File.ReadAllLines(file);
             string[] extensions = (from item in lines
-                                   group item by item.Split(';')[1] into groups
+                                   group item by item.Split(';')[1].ToLower() into groups
                                    select groups.Key).ToArray();
             string id;
             foreach (string ext in extensions)
@@ -21,13 +22,9 @@ namespace Intent.AnalisisDocumentos.BL
                 foreach (string item in searchLines)
                 {
                     id = item.Split(';')[0];
-                    //armar el nombre completo
-                    searchFile.SearchAccessibleFiles(id);
+                    searchFile.SearchAccessibleFiles(string.Format("{0}{1}{2}-{3}.{4}", config.Prefix, id, config.Code, config.Number, ext));
                 }
             }
-
-
-
         }
     }
 }

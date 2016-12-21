@@ -10,12 +10,13 @@ namespace Intent.AnalisisDocumentos
     public partial class MainWindow : Window
     {
         private ConfigFile configFile;
+        private Config config;
         public MainWindow()
         {
             InitializeComponent();
+            //carga configuracion 
             configFile = new ConfigFile(Prefijo.Text, Codigo.Text, Numero.Text, RutaBusqueda.Text);
-
-            Config config = configFile.CovertToObject();
+            config = configFile.CovertToObject();
             if (config != null)
             {
                 Prefijo.Text = config.Prefix;
@@ -31,23 +32,20 @@ namespace Intent.AnalisisDocumentos
             bool? result = dialog.ShowDialog();
             if (result.Value)
             {
-                ConfigFile configFile = new ConfigFile(Prefijo.Text, Codigo.Text, Numero.Text, RutaBusqueda.Text);
-                configFile.CheckConfig();
-
-                ProcessCSV.SplitCSV(dialog.FileName, RutaBusqueda.Text);
-
+                try
+                {
+                    //guarda nueva configuracion 
+                    ConfigFile configFile = new ConfigFile(Prefijo.Text, Codigo.Text, Numero.Text, RutaBusqueda.Text, true);
+                    //Divide csv y busca el archivo
+                    ProcessCSV.SplitCSV(dialog.FileName, RutaBusqueda.Text, configFile.Config);
+                    MessageBox.Show("Documentos Procesados de manera exitosa");
+                }
+                catch (System.Exception)
+                {
+                    MessageBox.Show("Error en el proceso ");
+                }
             }
         }
 
-        //private void Button_Click_1(object sender, RoutedEventArgs e)
-        //{
-        //    FolderBrowserDialog
-        //    Microsoft.Win32.CommonDialog dialog = new Microsoft.Win32.CommonDialog();
-        //    bool? result = dialog.ShowDialog();
-        //    if (result.Value)
-        //    {
-        //        RutaBusqueda.Text = dialog.InitialDirectory;
-        //    }
-        //}
     }
 }

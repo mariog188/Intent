@@ -64,12 +64,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BL\CreateFile.cs" />
     <Compile Include="BL\ConfigFile.cs" />
     <Compile Include="BL\ProcessCSV.cs" />
     <Compile Include="BL\SearchFile.cs" />
     <Compile Include="Entities\Config.cs" />
-    <Compile Include="VM\MainVM.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

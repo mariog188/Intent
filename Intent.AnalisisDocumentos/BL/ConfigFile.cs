@@ -1,9 +1,6 @@
 ﻿using Intent.AnalisisDocumentos.Entities;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -18,31 +15,22 @@ namespace Intent.AnalisisDocumentos.BL
 
         #region fields
         private string configPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
-        private string prefix;
-        private string code;
-        private string number;
-        private string searchPath;
         #endregion
 
         #region Properties
         public string file;
+        public Config Config;
         #endregion
 
-        public ConfigFile(string prefix, string code, string number, string path)
+        public ConfigFile(string prefix, string code, string number, string path, bool guardar = false)
         {
-            this.prefix = prefix;
-            this.code = code;
-            this.number = number;
-            searchPath = path.EndsWith(@"\") ? path : path + @"\"; ;
+            Config = new Config();
+            Config.Prefix = prefix;
+            Config.Code = code;
+            Config.Number = number;
+            Config.Path = path.EndsWith(@"\") ? path : path + @"\";
             file = string.Format("{0}\\{1}{2}", configPath, fileName, ".xml");
-        }
-
-
-
-
-        public void CheckConfig()
-        {
-            if (!File.Exists(file))
+            if (guardar)
                 ConvertToXml(file);
         }
 
@@ -50,17 +38,11 @@ namespace Intent.AnalisisDocumentos.BL
         {
             StringWriter stringWriter = new StringWriter();
             XmlTextWriter xmlWriter = null;
-
-            Config config = new Config();
-            config.Prefix = prefix;
-            config.Code = code;
-            config.Number = number;
-            config.Path = searchPath;
             try
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(config.GetType());
+                XmlSerializer xmlSerializer = new XmlSerializer(Config.GetType());
                 xmlWriter = new XmlTextWriter(stringWriter);
-                xmlSerializer.Serialize(xmlWriter, config);
+                xmlSerializer.Serialize(xmlWriter, Config);
                 File.WriteAllText(file, stringWriter.ToString());
             }
             catch (Exception)
