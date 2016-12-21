@@ -37,7 +37,7 @@
             <TextBox Name="Numero"
                      Margin="5"
                      Text="" />
-            <TextBox Margin="5" Text="" />
+            <TextBox Margin="5" Name="RutaBusqueda" Text="" />
         </StackPanel>
         <TextBlock Grid.Column="2"
                    HorizontalAlignment="Center"

@@ -8,7 +8,7 @@ namespace Intent.AnalisisDocumentos.BL
 {
     public class ProcessCSV
     {
-        public static void SplitCSV(string file)
+        public static void SplitCSV(string file, string searchPath)
         {
             string[] lines = File.ReadAllLines(file);
             string id;
@@ -18,7 +18,7 @@ namespace Intent.AnalisisDocumentos.BL
                 id = item.Split(',')[0];
                 ext = item.Split(',')[1];
                 //armar el nombre completo
-                SearchFile.SearchAccessibleFiles(id, ext);
+                SearchFile.SearchAccessibleFiles(id, ext, searchPath);
             }
         }
     }

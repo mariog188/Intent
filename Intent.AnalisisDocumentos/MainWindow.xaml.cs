@@ -1,4 +1,5 @@
 ﻿using Intent.AnalisisDocumentos.BL;
+using Intent.AnalisisDocumentos.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,20 @@ namespace Intent.AnalisisDocumentos
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ConfigFile configFile;
         public MainWindow()
         {
             InitializeComponent();
+            configFile = new ConfigFile(Prefijo.Text, Codigo.Text, Numero.Text, RutaBusqueda.Text);
+            
+            Config config = configFile.CovertToObject();
+            if (config != null)
+            {
+                Prefijo.Text = config.Prefix;
+                Codigo.Text = config.Code;
+                Numero.Text = config.Number;
+                RutaBusqueda.Text = config.Path;
+            }
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -31,7 +43,10 @@ namespace Intent.AnalisisDocumentos
             bool? result = dialog.ShowDialog();
             if (result.Value)
             {
-                ProcessCSV.SplitCSV(dialog.FileName);                
+                ConfigFile configFile = new ConfigFile(Prefijo.Text, Codigo.Text, Numero.Text, RutaBusqueda.Text);
+                configFile.CheckConfig();
+
+                ProcessCSV.SplitCSV(dialog.FileName, RutaBusqueda.Text);                
 
             }
 }
