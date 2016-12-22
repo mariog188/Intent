@@ -6,33 +6,26 @@ using System.Text;
 
 namespace Intent.AnalisisDocumentos.BL
 {
-    public class LogFile
+    public static class LogFile
     {
-        private string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
+        private static string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
         const string kSucess = "Archivos Exitosos";
         const string kFail = "Archivos Fallidos";
 
-        private string Sucess;
-        private string fail;
+        private static string Sucess = string.Format("{0}\\{1}", path, kSucess);
+        private static string fail = string.Format("{0}\\{1}", path, kFail);
 
-        public LogFile()
+        public static void WriteLog(List<string> content )
         {
-            FileStream fileStream = null;
-            Sucess = string.Format("{0}\\{1}", path, kSucess);
-            fail = string.Format("{0}\\{1}", path, kFail);
+            File.WriteAllLines(string.Format("{0}.txt", Sucess) , content.ToArray());            
         }
 
-        public void WriteLog(List<string> content, string extension )
+        public static void WriteError(List<string> content)
         {
-            File.WriteAllLines(string.Format("{0} {1}.txt", Sucess,extension) , content.ToArray());            
+            File.WriteAllLines(string.Format("{0}.txt", fail), content.ToArray());
         }
 
-        public void WriteError(List<string> content, string extension)
-        {
-            File.WriteAllLines(string.Format("{0} {1}.txt", fail, extension), content.ToArray());
-        }
-
-        public void CleanLog()
+        public static void CleanLog()
         {
             File.Delete(Sucess);
             File.Delete(fail);

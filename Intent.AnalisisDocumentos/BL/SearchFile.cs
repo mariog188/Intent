@@ -9,7 +9,6 @@ namespace Intent.AnalisisDocumentos.BL
     {
         private String[] files;
         private string extension;
-        private LogFile logfile = new LogFile();
         private List<string> exitosos;
         private List<string> fallidos;
 
@@ -45,10 +44,10 @@ namespace Intent.AnalisisDocumentos.BL
                 fallidos.Add(fileName);
         }
 
-        public void Log(string extension)
+        public void Log()
         {
-            logfile.WriteLog(exitosos, extension);
-            logfile.WriteError(fallidos, extension);
+            LogFile.WriteLog(exitosos);
+            LogFile.WriteError(fallidos);
 
         }
     }

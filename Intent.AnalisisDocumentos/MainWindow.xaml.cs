@@ -14,8 +14,7 @@ namespace Intent.AnalisisDocumentos
         public MainWindow()
         {
             InitializeComponent();
-            LogFile logFile = new LogFile();
-            logFile.CleanLog();
+            LogFile.CleanLog();
             //carga configuracion 
             configFile = new ConfigFile(Prefijo.Text, Codigo.Text, Numero.Text, RutaBusqueda.Text);
             config = configFile.CovertToObject();

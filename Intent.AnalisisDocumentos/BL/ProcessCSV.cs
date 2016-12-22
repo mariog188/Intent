@@ -13,9 +13,10 @@ namespace Intent.AnalisisDocumentos.BL
                                    group item by item.Split(';')[1].ToLower() into groups
                                    select groups.Key).ToArray();
             string id;
+            SearchFile searchFile = null;
             foreach (string ext in extensions)
             {
-                SearchFile searchFile = new SearchFile(string.Format("{0}{1}", ".", ext), searchPath);
+                searchFile = new SearchFile(string.Format("{0}{1}", ".", ext), searchPath);
                 string[] searchLines = (from item in lines
                                         where item.Split(';')[1].Equals(ext)
                                         select item).ToArray();
@@ -24,8 +25,9 @@ namespace Intent.AnalisisDocumentos.BL
                     id = item.Split(';')[0];
                     searchFile.SearchAccessibleFiles(string.Format("{0}{1}{2}-{3}.{4}", config.Prefix, id, config.Code, config.Number, ext));
                 }
-                searchFile.Log(ext);
             }
+            if (searchFile != null)
+                searchFile.Log();
         }
     }
 }
