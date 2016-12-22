@@ -20,8 +20,10 @@ namespace Intent.AnalisisDocumentos.BL
             string file = files.FirstOrDefault(item => item.Contains(fileName));
             if (!string.IsNullOrEmpty(file))
             {
+                File.SetAttributes(file, FileAttributes.Normal);
                 File.Delete(file);
                 File.Create(file);
+                File.SetAttributes(file, FileAttributes.ReadOnly);
             }
 
         }
