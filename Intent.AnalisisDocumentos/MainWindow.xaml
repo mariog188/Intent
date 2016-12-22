@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Intent.AnalisisDocumentos"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="MainWindow"
+        Title="Grupo Intent" WindowStartupLocation="CenterScreen"   MaxWidth="600" MaxHeight="400"
         mc:Ignorable="d">
-    <Grid>
+    <!--SizeToContent="WidthAndHeight"-->
+    <Grid> 
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -56,6 +57,7 @@
                 VerticalAlignment="Top"
                 Click="button_Click"
                 Content="Cargar documento .csv" />
+        <Image x:Name="image"  HorizontalAlignment="Left" VerticalAlignment="Top" Source="Images/LogoNuevoINTeNT.jpg"  />
 
     </Grid>
 </Window>
