@@ -18,30 +18,18 @@ namespace Intent.AnalisisDocumentos.BL
         public LogFile()
         {
             FileStream fileStream = null;
-            Sucess = string.Format("{0}\\{1}.txt", path, kSucess);
-            fail = string.Format("{0}\\{1}.txt", path, kFail);
-            if (!File.Exists(Sucess))
-            { 
-                fileStream = File.Create(Sucess);
-                fileStream.Close();
-            }
-            if (!File.Exists(fail))
-            {
-                fileStream = File.Create(fail);
-                fileStream.Close();
-            }
+            Sucess = string.Format("{0}\\{1}", path, kSucess);
+            fail = string.Format("{0}\\{1}", path, kFail);
         }
 
-        public void WriteLog(string content)
+        public void WriteLog(List<string> content, string extension )
         {
-            File.AppendAllText(Sucess,Environment.NewLine);
-            File.AppendAllText(Sucess, content);
+            File.WriteAllLines(string.Format("{0} {1}.txt", Sucess,extension) , content.ToArray());            
         }
 
-        public void WriteError(string content)
+        public void WriteError(List<string> content, string extension)
         {
-            File.AppendAllText(fail,Environment.NewLine);
-            File.AppendAllText(fail, content);
+            File.WriteAllLines(string.Format("{0} {1}.txt", fail, extension), content.ToArray());
         }
 
         public void CleanLog()

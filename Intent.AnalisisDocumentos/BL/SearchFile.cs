@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -9,10 +10,14 @@ namespace Intent.AnalisisDocumentos.BL
         private String[] files;
         private string extension;
         private LogFile logfile = new LogFile();
+        private List<string> exitosos;
+        private List<string> fallidos;
 
         public SearchFile(string extension, string searchPath)
         {
             this.extension = extension;
+            exitosos = new List<string>();
+            fallidos = new List<string>();
             files = Directory.GetFiles(searchPath, string.Format("{0}{1}", "*", extension), SearchOption.AllDirectories);
         }
 
@@ -29,15 +34,22 @@ namespace Intent.AnalisisDocumentos.BL
                     fileStream = File.Create(file);
                     fileStream.Close();
                     File.SetAttributes(file, FileAttributes.ReadOnly);
-                    logfile.WriteLog(fileName);
+                    exitosos.Add(fileName);
                 }
                 catch (Exception)
                 {
-                    logfile.WriteError(fileName);
+                    fallidos.Add(fileName);
                 }
             }
             else
-                logfile.WriteError(fileName);
+                fallidos.Add(fileName);
+        }
+
+        public void Log(string extension)
+        {
+            logfile.WriteLog(exitosos, extension);
+            logfile.WriteError(fallidos, extension);
+
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Intent.AnalisisDocumentos.BL
                     id = item.Split(';')[0];
                     searchFile.SearchAccessibleFiles(string.Format("{0}{1}{2}-{3}.{4}", config.Prefix, id, config.Code, config.Number, ext));
                 }
+                searchFile.Log(ext);
             }
         }
     }
