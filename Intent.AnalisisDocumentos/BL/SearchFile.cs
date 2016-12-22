@@ -8,9 +8,10 @@ namespace Intent.AnalisisDocumentos.BL
     {
         private String[] files;
         private string extension;
+        private LogFile logfile = new LogFile();
 
         public SearchFile(string extension, string searchPath)
-        {            
+        {
             this.extension = extension;
             files = Directory.GetFiles(searchPath, string.Format("{0}{1}", "*", extension), SearchOption.AllDirectories);
         }
@@ -18,14 +19,25 @@ namespace Intent.AnalisisDocumentos.BL
         public void SearchAccessibleFiles(string fileName)
         {
             string file = files.FirstOrDefault(item => item.Contains(fileName));
+            FileStream fileStream = null;
             if (!string.IsNullOrEmpty(file))
             {
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
-                File.Create(file);
-                File.SetAttributes(file, FileAttributes.ReadOnly);
+                try
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                    fileStream = File.Create(file);
+                    fileStream.Close();
+                    File.SetAttributes(file, FileAttributes.ReadOnly);
+                    logfile.WriteLog(fileName);
+                }
+                catch (Exception)
+                {
+                    logfile.WriteError(fileName);
+                }
             }
-
+            else
+                logfile.WriteError(fileName);
         }
     }
 }

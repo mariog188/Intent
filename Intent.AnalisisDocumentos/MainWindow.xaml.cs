@@ -14,6 +14,8 @@ namespace Intent.AnalisisDocumentos
         public MainWindow()
         {
             InitializeComponent();
+            LogFile logFile = new LogFile();
+            logFile.CleanLog();
             //carga configuracion 
             configFile = new ConfigFile(Prefijo.Text, Codigo.Text, Numero.Text, RutaBusqueda.Text);
             config = configFile.CovertToObject();
@@ -40,9 +42,9 @@ namespace Intent.AnalisisDocumentos
                     ProcessCSV.SplitCSV(dialog.FileName, RutaBusqueda.Text, configFile.Config);
                     MessageBox.Show("Documentos Procesados de manera exitosa");
                 }
-                catch (System.Exception)
+                catch (System.Exception exc)
                 {
-                    MessageBox.Show("Error en el proceso ");
+                    MessageBox.Show("Error en el proceso " + exc);
                 }
             }
         }

@@ -65,6 +65,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BL\ConfigFile.cs" />
+    <Compile Include="BL\LogFile.cs" />
     <Compile Include="BL\ProcessCSV.cs" />
     <Compile Include="BL\SearchFile.cs" />
     <Compile Include="Entities\Config.cs" />
