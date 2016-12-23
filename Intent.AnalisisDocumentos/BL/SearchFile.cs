@@ -9,14 +9,15 @@ namespace Intent.AnalisisDocumentos.BL
     {
         private String[] files;
         private string extension;
-        private List<string> exitosos;
-        private List<string> fallidos;
+
+        public List<string> Exitosos;
+        public List<string> Fallidos;
 
         public SearchFile(string extension, string searchPath)
         {
             this.extension = extension;
-            exitosos = new List<string>();
-            fallidos = new List<string>();
+            Exitosos = new List<string>();
+            Fallidos = new List<string>();
             files = Directory.GetFiles(searchPath, string.Format("{0}{1}", "*", extension), SearchOption.AllDirectories);
         }
 
@@ -33,18 +34,18 @@ namespace Intent.AnalisisDocumentos.BL
                     fileStream = File.Create(file);
                     fileStream.Close();
                     File.SetAttributes(file, FileAttributes.ReadOnly);
-                    exitosos.Add(fileName);
+                    Exitosos.Add(fileName);
                 }
                 catch (Exception)
                 {
-                    fallidos.Add(fileName);
+                    Fallidos.Add(fileName);
                 }
             }
             else
-                fallidos.Add(fileName);
+                Fallidos.Add(fileName);
         }
 
-        public void Log()
+        public void Log(List<string> exitosos, List<string> fallidos)
         {
             LogFile.WriteLog(exitosos);
             LogFile.WriteError(fallidos);

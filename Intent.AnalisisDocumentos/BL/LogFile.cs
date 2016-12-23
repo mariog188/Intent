@@ -15,14 +15,28 @@ namespace Intent.AnalisisDocumentos.BL
         private static string Sucess = string.Format("{0}\\{1}", path, kSucess);
         private static string fail = string.Format("{0}\\{1}", path, kFail);
 
-        public static void WriteLog(List<string> content )
+        public static void WriteLog(List<string> content)
         {
-            File.WriteAllLines(string.Format("{0}.txt", Sucess) , content.ToArray());            
+            try
+            {
+                File.WriteAllLines(string.Format("{0}.txt", Sucess), content.ToArray());
+            }
+            catch (Exception )
+            {                
+                throw;
+            }
         }
 
         public static void WriteError(List<string> content)
         {
-            File.WriteAllLines(string.Format("{0}.txt", fail), content.ToArray());
+            try
+            {
+                File.WriteAllLines(string.Format("{0}.txt", fail), content.ToArray());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public static void CleanLog()
@@ -30,6 +44,18 @@ namespace Intent.AnalisisDocumentos.BL
             File.Delete(Sucess);
             File.Delete(fail);
 
+        }
+    }
+
+    public class Log
+    {
+        public List<string> Exitosos;
+        public List<string> Fallidos;
+
+        public Log()
+        {
+            Exitosos = new List<string>();
+            Fallidos = new List<string>();
         }
     }
 }
