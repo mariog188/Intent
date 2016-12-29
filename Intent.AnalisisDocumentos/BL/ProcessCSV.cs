@@ -1,36 +1,91 @@
 ﻿using Intent.AnalisisDocumentos.Entities;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Intent.AnalisisDocumentos.BL
 {
+    public class ThreadProcess
+    {
+        private string ext;
+        private string searchPath;
+        private string[] lines;
+        public SearchFile searchFile = null;
+        private Config config;
+        private Log log;
+
+        public ThreadProcess(string ext, string searchPath, string[] lines, Config config, Log log)
+        {
+            this.ext = ext;
+            this.searchPath = searchPath;
+            this.lines = lines;
+            this.config = config;
+            this.log = log;
+        }
+
+
+        public void ProcessFiles()
+        {
+            string id;
+            searchFile = new SearchFile(string.Format("{0}{1}", ".", ext), searchPath);
+            string[] searchLines = (from item in lines
+                                    where item.Split(';')[1].Equals(ext)
+                                    select item).ToArray();
+            foreach (string item in searchLines)
+            {
+                id = item.Split(';')[0];
+                searchFile.SearchAccessibleFiles(string.Format("{0}{1}{2}-{3}.{4}", config.Prefix, id, config.Code, config.Number, ext));
+            }
+            //log.Exitosos = log.Exitosos.Concat(searchFile.Exitosos).ToList();
+            //log.Fallidos = log.Fallidos.Concat(searchFile.Fallidos).ToList();
+
+        }
+    }
+
+
+
     public class ProcessCSV
     {
-        public static void SplitCSV(string file, string searchPath, Config config)
+        private SearchFile searchFile = null;
+        private Log log;
+        private Config config;
+
+        public ProcessCSV()
         {
+            Log log = new Log();
+        }
+        public void SplitCSV(string file, string searchPath, Config config)
+        {
+            this.config = config;
             string[] lines = File.ReadAllLines(file);
             string[] extensions = (from item in lines
                                    group item by item.Split(';')[1].ToLower() into groups
                                    select groups.Key).ToArray();
-            string id;
-            Log log = new Log();
-            SearchFile searchFile = null;
+            
+            Task[] tareass = new Task[extensions.Length];
+            int contador = 0;
             foreach (string ext in extensions)
             {
-                searchFile = new SearchFile(string.Format("{0}{1}", ".", ext), searchPath);
-                string[] searchLines = (from item in lines
-                                        where item.Split(';')[1].Equals(ext)
-                                        select item).ToArray();
-                foreach (string item in searchLines)
-                {
-                    id = item.Split(';')[0];
-                    searchFile.SearchAccessibleFiles(string.Format("{0}{1}{2}-{3}.{4}", config.Prefix, id, config.Code, config.Number, ext));
-                }
-                log.Exitosos = log.Exitosos.Concat(searchFile.Exitosos).ToList();
-                log.Fallidos = log.Fallidos.Concat(searchFile.Fallidos).ToList();
+                
+                ThreadProcess tpr = new ThreadProcess(ext,searchPath,lines,config,log);
+                tareass[contador] = Task.Factory.StartNew(() => tpr.ProcessFiles());
+                contador++;
+                //thread = new Thread(new ThreadStart(tpr.ProcessFiles));
+
+
+
+                //ThreadPool.QueueUserWorkItem(tpr.ProcessFiles);
+                //thread.Start();
+
             }
+            Task.WaitAll(tareass);
+            
             if (searchFile != null)
                 searchFile.Log(log.Exitosos, log.Fallidos);
         }
+
+
     }
 }

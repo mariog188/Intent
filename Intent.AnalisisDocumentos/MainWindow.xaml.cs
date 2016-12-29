@@ -38,7 +38,7 @@ namespace Intent.AnalisisDocumentos
                     //guarda nueva configuracion 
                     ConfigFile configFile = new ConfigFile(Prefijo.Text, Codigo.Text, Numero.Text, RutaBusqueda.Text, true);
                     //Divide csv y busca el archivo
-                    ProcessCSV.SplitCSV(dialog.FileName, RutaBusqueda.Text, configFile.Config);
+                    new ProcessCSV().SplitCSV(dialog.FileName, RutaBusqueda.Text, configFile.Config);
                     MessageBox.Show("Documentos Procesados de manera exitosa");
                 }
                 catch (System.Exception exc)
