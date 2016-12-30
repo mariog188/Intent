@@ -28,16 +28,22 @@ namespace Intent.AnalisisDocumentos.BL
 
         public void ProcessFiles()
         {
-            string id;
+
             searchFile = new SearchFile(string.Format("{0}{1}", ".", ext), searchPath);
             string[] searchLines = (from item in lines
-                                    where item.Split(';')[1].Equals(ext)
+                                    where item.Split(';')[1].ToLower().Equals(ext)
                                     select item).ToArray();
-            foreach (string item in searchLines)
+            Parallel.ForEach(searchLines, item =>
             {
-                id = item.Split(';')[0];
+                string id = item.Split(';')[0];
                 searchFile.SearchAccessibleFiles(string.Format("{0}{1}{2}-{3}.{4}", config.Prefix, id, config.Code, config.Number, ext));
-            }
+            });
+            searchFile.files.Clear();
+            //foreach (string item in searchLines)
+            //{
+            //    id = ;
+            //    searchFile.SearchAccessibleFiles(string.Format("{0}{1}{2}-{3}.{4}", config.Prefix, id, config.Code, config.Number, ext));
+            //}
             //log.Exitosos = log.Exitosos.Concat(searchFile.Exitosos).ToList();
             //log.Fallidos = log.Fallidos.Concat(searchFile.Fallidos).ToList();
 
@@ -60,28 +66,35 @@ namespace Intent.AnalisisDocumentos.BL
         {
             this.config = config;
             string[] lines = File.ReadAllLines(file);
-            string[] extensions = (from item in lines
-                                   group item by item.Split(';')[1].ToLower() into groups
-                                   select groups.Key).ToArray();
-            
-            Task[] tareass = new Task[extensions.Length];
-            int contador = 0;
-            foreach (string ext in extensions)
+            List<string> extensions = (from item in lines
+                                       group item by item.Split(';')[1].ToLower() into groups
+                                       select groups.Key).ToList();
+
+            //Task[] tareass = new Task[extensions.Length];
+            Parallel.ForEach(extensions, item =>
             {
-                
-                ThreadProcess tpr = new ThreadProcess(ext,searchPath,lines,config,log);
-                tareass[contador] = Task.Factory.StartNew(() => tpr.ProcessFiles());
-                contador++;
-                //thread = new Thread(new ThreadStart(tpr.ProcessFiles));
+                ThreadProcess tpr = new ThreadProcess(item, searchPath, lines, config, log);
+                tpr.ProcessFiles();
+            });
+
+            //int contador = 0;
+            //foreach (string ext in extensions)
+            //{
+
+            //    ThreadProcess tpr = new ThreadProcess(ext, searchPath, lines, config, log);
+
+            //    tareass[contador] = Task.Factory.StartNew(() => tpr.ProcessFiles());
+            //    contador++;
+            //    //thread = new Thread(new ThreadStart(tpr.ProcessFiles));
 
 
 
-                //ThreadPool.QueueUserWorkItem(tpr.ProcessFiles);
-                //thread.Start();
+            //    //ThreadPool.QueueUserWorkItem(tpr.ProcessFiles);
+            //    //thread.Start();
 
-            }
-            Task.WaitAll(tareass);
-            
+            //}
+            //Task.WaitAll(tareass);
+
             if (searchFile != null)
                 searchFile.Log(log.Exitosos, log.Fallidos);
         }
